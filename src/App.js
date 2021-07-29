@@ -1,14 +1,31 @@
 import './App.css';
-import Logo from './components/Logo';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 
-function App() {
+import LandingPage from './pages/LandingPage';
+import DiscordBotPage from './pages/DiscordBotPage';
+import SayThanksPage from './pages/SayThanksPage';
+
+const App = () => {
   return (
-    <div className="App">
-      <Logo />
-      <h1>
-        MilkyTaste
-      </h1>
-    </div>
+    <Router>
+      <div className="App">
+        <Switch>
+          <Route path="/discord">
+            <DiscordBotPage />
+          </Route>
+          <Route path="/thanks">
+            <SayThanksPage />
+          </Route>
+          <Route path="/">
+            <LandingPage />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 

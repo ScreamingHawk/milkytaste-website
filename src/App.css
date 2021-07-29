@@ -1,6 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=WindSong&display=swap');
 
+* {
+  box-sizing: border-box;
+}
+
 h1 {
+  font-family: 'WindSong', cursive;
+}
+
+.fancy {
   font-family: 'WindSong', cursive;
 }
 
