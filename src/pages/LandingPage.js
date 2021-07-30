@@ -11,6 +11,7 @@ const LandingPage = () => {
       <p>check out the various products and services on offer</p>
       <LineLinks>
         <Link to="/discord">Discord Bots</Link>
+        <Link to="/contact">Contact Me</Link>
         <Link to="/thanks">Say Thanks</Link>
       </LineLinks>
     </PageContent>

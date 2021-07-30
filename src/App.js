@@ -8,6 +8,7 @@ import {
 import LandingPage from './pages/LandingPage';
 import DiscordBotPage from './pages/DiscordBotPage';
 import SayThanksPage from './pages/SayThanksPage';
+import ContactMePage from './pages/ContactMePage';
 
 const App = () => {
   return (
@@ -16,6 +17,9 @@ const App = () => {
         <Switch>
           <Route path="/discord">
             <DiscordBotPage />
+          </Route>
+          <Route path="/contact">
+            <ContactMePage />
           </Route>
           <Route path="/thanks">
             <SayThanksPage />
