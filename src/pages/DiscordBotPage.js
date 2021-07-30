@@ -19,6 +19,9 @@ const DiscordBotPage = () => {
         <p>
           <Link to="/discord/codex">Codex <small>(read more)</small></Link>, a bot that tracks OpenSea sales for <a href="https://www.parallel.life/">Parallel</a>.
         </p>
+        <p>
+          If you are interested in a Discord bot for your project, <Link to="/contact">contact me</Link> for more info.
+        </p>
       </PageContent>
     </>
   )
