@@ -14,8 +14,10 @@ const LandingPage = () => {
         <Link to="/discord">Discord Bots</Link>
         <Link to="/minting">NFT Minting</Link>
         <Link to="/architecture">Architecture</Link>
-        <Link to="/contact">Contact Me</Link>
       </LineLinks>
+    <p>
+      <Link to="/contact">Contact Me</Link>
+    </p>
     </PageContent>
   )
 }
