@@ -11,8 +11,8 @@ const Dot = styled.div`
 	width: 2em;
 `
 
-const Logo = () => (
-	<Dot>🥛</Dot>
+const Logo = ({ children }) => (
+	<Dot>{children || '🥛'}</Dot>
 )
 
 export default Logo
