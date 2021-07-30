@@ -4,6 +4,10 @@ import { faDiscord, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-ic
 import Header from '../components/Header';
 import PageContent from '../components/PageContent';
 
+import testimonial_1 from '../images/general_testimonial_1.png';
+import testimonial_2 from '../images/general_testimonial_2.png';
+import ImageList from '../components/ImageList';
+
 const ContactMePage = () => {
   return (
     <>
@@ -22,6 +26,10 @@ const ContactMePage = () => {
         <p>
           <a href="https://michael.standen.link"><FontAwesomeIcon icon={faLinkedin} size="xl" /> Stalk on LinkedIn</a>
         </p>
+        <ImageList>
+          {testimonial_1}
+          {testimonial_2}
+        </ImageList>
       </PageContent>
     </>
   )
