@@ -8,11 +8,11 @@ const LandingPage = () => {
     <PageContent>
       <Logo />
       <h1>MilkyTaste</h1>
-      <p>check out the various products and services on offer</p>
+      <p>A full stack developer building on the Ethereum blockchain.</p>
+      <p>Check out the various products and services available.</p>
       <LineLinks>
         <Link to="/discord">Discord Bots</Link>
         <Link to="/contact">Contact Me</Link>
-        <Link to="/thanks">Say Thanks</Link>
       </LineLinks>
     </PageContent>
   )
