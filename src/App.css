@@ -4,12 +4,12 @@
   box-sizing: border-box;
 }
 
-h1 {
+h1, .fancy {
   font-family: 'WindSong', cursive;
 }
 
-.fancy {
-  font-family: 'WindSong', cursive;
+a {
+  text-decoration: none;
 }
 
 .App {
