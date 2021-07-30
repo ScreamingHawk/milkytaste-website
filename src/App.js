@@ -10,6 +10,7 @@ import DiscordBotPage from './pages/DiscordBotPage';
 import ContactMePage from './pages/ContactMePage';
 import DiscordCosmosPage from './pages/DiscordCosmosPage';
 import DiscordCodexPage from './pages/DiscordCodexPage';
+import ArchitecturePage from './pages/ArchitecturePage';
 
 const App = () => {
   return (
@@ -24,6 +25,9 @@ const App = () => {
           </Route>
           <Route path="/discord">
             <DiscordBotPage />
+          </Route>
+          <Route path="/architecture">
+            <ArchitecturePage />
           </Route>
           <Route path="/contact">
             <ContactMePage />
