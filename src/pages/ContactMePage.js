@@ -6,6 +6,7 @@ import PageContent from '../components/PageContent';
 
 import testimonial_1 from '../images/general_testimonial_1.png';
 import testimonial_2 from '../images/general_testimonial_2.png';
+import testimonial_3 from '../images/general_testimonial_3.png';
 import ImageList from '../components/ImageList';
 
 const ContactMePage = () => {
@@ -32,6 +33,7 @@ const ContactMePage = () => {
         <ImageList>
           {testimonial_1}
           {testimonial_2}
+          {testimonial_3}
         </ImageList>
       </PageContent>
     </>
