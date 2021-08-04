@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import { faDiscord, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { faDiscord, faGithub, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import Header from '../components/Header';
 import PageContent from '../components/PageContent';
 
@@ -16,6 +16,9 @@ const ContactMePage = () => {
         <h1>Contact Me</h1>
         <p>
           <a href="https://discordapp.com/users/172630139878768640"><FontAwesomeIcon icon={faDiscord} size="xl" /> DM on Discord</a>
+        </p>
+        <p>
+          <a href="https://twitter.com/MilkyTasteEth"><FontAwesomeIcon icon={faTwitter} size="xl" /> Tweet to me on Twitter</a>
         </p>
         <p>
           <a href="mailto:michael@standen.link?subject=MilkyTaste Contact"><FontAwesomeIcon icon={faEnvelope} size="xl" /> Send an Email</a>
