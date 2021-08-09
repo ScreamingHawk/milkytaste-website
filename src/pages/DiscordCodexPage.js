@@ -24,6 +24,8 @@ const DiscordCodexPage = () => {
           Codex listens for live sales and posts them to the <a href="https://discord.gg/rV3SKTJeKk"><FontAwesomeIcon icon={faDiscord} /> Parallel Discord</a>, often beating the notifications from OpenSea themselves.
           <br />
           You can see the item sold, from and to who, prices in ΞETH and $USD.
+          <br />
+          The embedded post is colour matched to the Parallel metadata element on each card.
         </p>
         <ImageList>
           {codex_sale}
