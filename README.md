@@ -2,7 +2,7 @@
 
 This is a website for products and services available by MilkyTaste.
 
-This website is available at [https://milkytaste.xyz](https://milkytaste.xyz) and deployed on IPFS.
+This website is available at [https://milkytaste.xyz](https://milkytaste.xyz).
 
 ## Credits
 
