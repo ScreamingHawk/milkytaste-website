@@ -12,6 +12,7 @@ import DiscordCosmosPage from './pages/DiscordCosmosPage';
 import DiscordCodexPage from './pages/DiscordCodexPage';
 import MintingPage from './pages/MintingPage';
 import ArchitecturePage from './pages/ArchitecturePage';
+import DiscordPunksPage from './pages/DiscordPunksPage';
 
 const App = () => {
   return (
@@ -20,6 +21,9 @@ const App = () => {
         <Switch>
           <Route path="/discord/cosmos">
             <DiscordCosmosPage />
+          </Route>
+          <Route path="/discord/punks">
+            <DiscordPunksPage />
           </Route>
           <Route path="/discord/codex">
             <DiscordCodexPage />
