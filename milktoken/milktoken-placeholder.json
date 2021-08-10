@@ -1,0 +1,12 @@
+{
+  "description": "A secret token of affection from your buddy MilkyTaste.",
+  "external_url": "https://milkytaste.xyz",
+  "image": "https://milkytaste.xyz/milktoken.png",
+  "name": "Unrevealed MilkToken",
+  "attributes": [
+    {
+      "trait_type": "Revealed",
+      "value": "Unrevealed"
+    }
+  ]
+}
