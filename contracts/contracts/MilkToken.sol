@@ -17,10 +17,12 @@ contract MilkToken is ERC721, Ownable {
 	string private baseURI;
 
 	uint256 private _supplyCap;
+	uint256 private _revealedTo;
 
 	constructor() ERC721('MilkToken', 'MILK') {
-		placeholderURI = 'https://raw.githack.com/ScreamingHawk/milkytaste-website/master/contracts/placeholder.json';
+		placeholderURI = 'https://milkytaste.xyz/milktoken/placeholder.json';
 		_supplyCap = 100;
+		_revealedTo = 1;
 		mintToken(_msgSender());
 	}
 
@@ -57,12 +59,23 @@ contract MilkToken is ERC721, Ownable {
 	}
 
 	/**
+	 * @dev Update the base URI
+	 */
+	function setRevealedTo(uint256 newRevealedTo) external onlyOwner {
+		_revealedTo = newRevealedTo;
+	}
+
+	/**
 	 * @dev See {IERC721Metadata-tokenURI}.
 	 */
 	function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
 		require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
 
-		return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, tokenId.toString(), '.json')) : placeholderURI;
+		if (tokenId > _revealedTo || bytes(baseURI).length == 0) {
+			return placeholderURI;
+		}
+
+		return string(abi.encodePacked(baseURI, tokenId.toString(), '.json'));
 	}
 
 	/**

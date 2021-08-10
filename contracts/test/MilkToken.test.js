@@ -1,5 +1,7 @@
 const { expect } = require("chai")
 
+const PLACEHOLDER_URI = 'https://milkytaste.xyz/milktoken/placeholder.json'
+
 describe("MilkToken", () => {
 
 	let MilkToken, milkToken, owner, addr1, addr2
@@ -15,6 +17,11 @@ describe("MilkToken", () => {
 		;[owner, addr1, addr2] = await ethers.getSigners()
 
 		await milkToken.deployed();
+
+		// Set this to 0 for tests
+		const tx = await milkToken.setRevealedTo(0)
+		await tx.wait()
+
 		return milkToken
 	})
 
@@ -101,14 +108,52 @@ describe("MilkToken", () => {
 
 	it("Should get placeholder URI", async () => {
 		const uri = await milkToken.tokenURI(1)
-		expect(uri).to.equal('https://raw.githack.com/ScreamingHawk/milkytaste-website/master/contracts/placeholder.json')
+		expect(uri).to.equal(PLACEHOLDER_URI)
 	})
 
-	it("Should get real URI", async () => {
+	it("Should get placeholder with only baseURI updated", async () => {
 		const newBase = 'https://milkytaste.xyz/'
 		const tx = await milkToken.setBaseURI(newBase)
 		await tx.wait()
 		const uri = await milkToken.tokenURI(1)
+		expect(uri).to.equal(PLACEHOLDER_URI)
+	})
+
+	it("Should update placeholder", async () => {
+		const newPlaceholder = 'https://milkytaste.xyz/'
+		const tx = await milkToken.setPlaceholderURI(newPlaceholder)
+		await tx.wait()
+		const uri = await milkToken.tokenURI(1)
+		expect(uri).to.equal(newPlaceholder)
+	})
+
+	it("Should get placeholder with only revealTo updated", async () => {
+		const tx = await milkToken.setRevealedTo(1)
+		await tx.wait()
+		const uri = await milkToken.tokenURI(1)
+		expect(uri).to.equal(PLACEHOLDER_URI)
+	})
+
+	it("Should get real URI with base and revealed", async () => {
+		const newBase = 'https://milkytaste.xyz/'
+		let tx = await milkToken.setBaseURI(newBase)
+		await tx.wait()
+		tx = await milkToken.setRevealedTo(1)
+		await tx.wait()
+		const uri = await milkToken.tokenURI(1)
 		expect(uri).to.equal(`${newBase}1.json`)
+	})
+
+	it("Should get placeholder after resetting placeholder", async () => {
+		const newBase = 'https://milkytaste.xyz/'
+		const newPlaceholder = 'https://not.milkytaste.xyz/'
+		let tx = await milkToken.setBaseURI(newBase)
+		await tx.wait()
+		tx = await milkToken.setRevealedTo(1)
+		await tx.wait()
+		tx = await milkToken.setPlaceholderURI(newPlaceholder)
+		await tx.wait()
+		const uri = await milkToken.tokenURI(1)
+		expect(uri).to.equal(newPlaceholder)
 	})
 })
