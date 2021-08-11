@@ -21,6 +21,9 @@ const MintingPage = () => {
           This includes the smart contracts, front end website and image generation tools.
         </p>
         <p>
+          <Link to="/milktoken">Want a demo token?</Link>
+        </p>
+        <p>
           Please <Link to="/contact">contact me</Link> to discuss your master plan.
         </p>
       </PageContent>
