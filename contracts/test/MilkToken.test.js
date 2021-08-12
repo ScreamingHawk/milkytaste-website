@@ -156,4 +156,16 @@ describe("MilkToken", () => {
 		const uri = await milkToken.tokenURI(1)
 		expect(uri).to.equal(newPlaceholder)
 	})
+
+	it("Should get token id of owner", async () => {
+		await mint(addr1, addr1)
+		let tokenId = await milkToken.tokenOfOwnerByIndex(owner.address, 0)
+		expect(tokenId).to.equal(1)
+		tokenId = await milkToken.tokenOfOwnerByIndex(addr1.address, 0)
+		expect(tokenId).to.equal(2)
+		
+		await expect(
+			milkToken.tokenOfOwnerByIndex(addr2.address, 0)
+		).to.be.revertedWith('ERC721Enumerable: owner index out of bounds')
+	})
 })

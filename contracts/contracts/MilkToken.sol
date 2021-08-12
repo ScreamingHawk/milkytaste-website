@@ -3,10 +3,10 @@ pragma solidity ^0.8.0;
 
 import 'hardhat/console.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
-import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 import '@openzeppelin/contracts/utils/Counters.sol';
 
-contract MilkToken is ERC721, Ownable {
+contract MilkToken is ERC721Enumerable, Ownable {
 	
 	using Strings for uint256;
 	using Counters for Counters.Counter;
@@ -34,7 +34,9 @@ contract MilkToken is ERC721, Ownable {
 		_;
 	}
 
-	function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual override canOwnMore(to) {}
+	function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual override canOwnMore(to) {
+		super._beforeTokenTransfer(from, to, tokenId);
+	}
 
 	/**
 	 * @dev Update the placeholder URI and clear the baseURI
@@ -91,13 +93,6 @@ contract MilkToken is ERC721, Ownable {
 
 		_safeMint(addr, id);
 		return id;
-	}
-
-	/**
-		* @dev Return the total supply
-		*/
-	function totalSupply() public view virtual returns (uint256) {
-		return _tokenIds.current();
 	}
 
 	/**
