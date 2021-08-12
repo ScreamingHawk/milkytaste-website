@@ -1,6 +1,7 @@
 require('dotenv').config()
 require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-etherscan");
+require("hardhat-gas-reporter");
 
 const {
 	ALCHEMY_API_KEY,
@@ -30,5 +31,9 @@ module.exports = {
 	},
 	etherscan: {
 		apiKey: ETHERSCAN_API_KEY,
+	},
+	gasReporter: {
+		currency: 'NZD',
+		gasPrice: 40,
 	},
 };
