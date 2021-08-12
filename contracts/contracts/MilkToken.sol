@@ -1,7 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import 'hardhat/console.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 import '@openzeppelin/contracts/utils/Counters.sol';
@@ -89,8 +88,6 @@ contract MilkToken is ERC721Enumerable, Ownable {
 
 		_tokenIds.increment();
 		uint256 id = _tokenIds.current();
-
-		console.log('Minting id ', id, ' for ', addr);
 
 		_safeMint(addr, id);
 		return id;
