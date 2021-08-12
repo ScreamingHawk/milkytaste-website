@@ -12,6 +12,18 @@
       "display_type": "number",
       "trait_type": "Generation",
       "value": 1
+    },
+    {
+      "trait_type": "Colour",
+      "value": "Blue"
+    },
+    {
+      "trait_type": "Project Name",
+      "value": "MilkProjects"
+    },
+    {
+      "trait_type": "Project Website",
+      "value": "https://milkytaste.xyz"
     }
   ]
 }
