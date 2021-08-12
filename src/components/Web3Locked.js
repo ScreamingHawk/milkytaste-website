@@ -20,7 +20,6 @@ const web3Modal = new Web3Modal({
 
 const Web3Locked = ({ children }) => {
 	const { state, dispatch } = useWeb3()
-	console.log(state)
 
 	const connect = async () => {
 		web3Modal.clearCachedProvider()

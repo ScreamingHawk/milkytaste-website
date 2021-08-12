@@ -6,7 +6,11 @@ const Web3Context = createContext()
 const web3Reducer = (state, action) => {
 	switch (action.type) {
 		case 'set': {
-			return {provider: action.payload}
+			const provider = action.payload
+			return {
+				provider,
+				address: provider?.selectedAddress,
+			}
 		}
 		default: {
 			throw new Error(`Unhandled action type: ${action.type}`)
