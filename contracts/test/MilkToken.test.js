@@ -1,6 +1,7 @@
 const { expect } = require("chai")
 
 const PLACEHOLDER_URI = 'https://milkytaste.xyz/milktoken/placeholder.json'
+const BASE_URI = 'https://milkytaste.xyz/milktoken/'
 
 describe("MilkToken", () => {
 
@@ -112,7 +113,7 @@ describe("MilkToken", () => {
 	})
 
 	it("Should get placeholder with only baseURI updated", async () => {
-		const newBase = 'https://milkytaste.xyz/'
+		const newBase = 'https://new.milkytaste.xyz/'
 		const tx = await milkToken.setBaseURI(newBase)
 		await tx.wait()
 		const uri = await milkToken.tokenURI(1)
@@ -120,22 +121,30 @@ describe("MilkToken", () => {
 	})
 
 	it("Should update placeholder", async () => {
-		const newPlaceholder = 'https://milkytaste.xyz/'
+		const newPlaceholder = 'https://new.milkytaste.xyz/'
 		const tx = await milkToken.setPlaceholderURI(newPlaceholder)
 		await tx.wait()
 		const uri = await milkToken.tokenURI(1)
 		expect(uri).to.equal(newPlaceholder)
 	})
 
-	it("Should get placeholder with only revealTo updated", async () => {
+	it("Should have first token revealed after deployment", async () => {
 		const tx = await milkToken.setRevealedTo(1)
 		await tx.wait()
 		const uri = await milkToken.tokenURI(1)
+		expect(uri).to.equal(`${BASE_URI}1.json`)
+	})
+
+	it("Should get placeholder when above revealTo", async () => {
+		await mint(addr1, addr1)
+		const tx = await milkToken.setRevealedTo(1)
+		await tx.wait()
+		const uri = await milkToken.tokenURI(2)
 		expect(uri).to.equal(PLACEHOLDER_URI)
 	})
 
 	it("Should get real URI with base and revealed", async () => {
-		const newBase = 'https://milkytaste.xyz/'
+		const newBase = 'https://new.milkytaste.xyz/'
 		let tx = await milkToken.setBaseURI(newBase)
 		await tx.wait()
 		tx = await milkToken.setRevealedTo(1)
@@ -145,7 +154,7 @@ describe("MilkToken", () => {
 	})
 
 	it("Should get placeholder after resetting placeholder", async () => {
-		const newBase = 'https://milkytaste.xyz/'
+		const newBase = 'https://new.milkytaste.xyz/'
 		const newPlaceholder = 'https://not.milkytaste.xyz/'
 		let tx = await milkToken.setBaseURI(newBase)
 		await tx.wait()

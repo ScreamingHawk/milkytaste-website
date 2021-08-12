@@ -21,6 +21,7 @@ contract MilkToken is ERC721Enumerable, Ownable {
 
 	constructor() ERC721('MilkToken', 'MILK') {
 		placeholderURI = 'https://milkytaste.xyz/milktoken/placeholder.json';
+		baseURI = 'https://milkytaste.xyz/milktoken/';
 		_supplyCap = 100;
 		_revealedTo = 1;
 		mintToken(_msgSender());
