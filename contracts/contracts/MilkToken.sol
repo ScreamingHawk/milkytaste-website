@@ -16,14 +16,15 @@ contract MilkToken is ERC721Enumerable, Ownable {
 	string private baseURI;
 
 	uint256 private _supplyCap;
-	uint256 private _revealedTo;
+
+	mapping(uint256 => bool) private _tokenRevealed;
 
 	constructor() ERC721('MilkToken', 'MILK') {
 		placeholderURI = 'https://milkytaste.xyz/milktoken/placeholder.json';
 		baseURI = 'https://milkytaste.xyz/milktoken/';
 		_supplyCap = 100;
-		_revealedTo = 1;
 		mintToken(_msgSender());
+		_tokenRevealed[1] = true;
 	}
 
 	/**
@@ -61,10 +62,10 @@ contract MilkToken is ERC721Enumerable, Ownable {
 	}
 
 	/**
-	 * @dev Update the base URI
+	 * @dev Reveal a token
 	 */
-	function setRevealedTo(uint256 newRevealedTo) external onlyOwner {
-		_revealedTo = newRevealedTo;
+	function revealToken(uint256 tokenId) external onlyOwner {
+		_tokenRevealed[tokenId] = true;
 	}
 
 	/**
@@ -73,11 +74,11 @@ contract MilkToken is ERC721Enumerable, Ownable {
 	function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
 		require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
 
-		if (tokenId > _revealedTo || bytes(baseURI).length == 0) {
-			return placeholderURI;
+		if (_tokenRevealed[tokenId] && bytes(baseURI).length > 0) {
+			return string(abi.encodePacked(baseURI, tokenId.toString(), '.json'));
 		}
 
-		return string(abi.encodePacked(baseURI, tokenId.toString(), '.json'));
+		return placeholderURI;
 	}
 
 	/**

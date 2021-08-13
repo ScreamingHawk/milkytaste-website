@@ -19,11 +19,13 @@ describe("MilkToken", () => {
 
 		await milkToken.deployed();
 
-		// Set this to 0 for tests
-		const tx = await milkToken.setRevealedTo(0)
-		await tx.wait()
-
 		return milkToken
+	})
+
+	it("Should allow ownership transfer", async () => {
+		const tx = await milkToken.transferOwnership(addr1.address)
+		await tx.wait()
+		expect(await milkToken.owner()).to.equal(addr1.address)
 	})
 
 	it("Should mint 1 to deployer", async () => {
@@ -108,15 +110,19 @@ describe("MilkToken", () => {
 	})
 
 	it("Should get placeholder URI", async () => {
-		const uri = await milkToken.tokenURI(1)
+		await mint(addr1, addr1)
+		const uri = await milkToken.tokenURI(2)
 		expect(uri).to.equal(PLACEHOLDER_URI)
 	})
 
 	it("Should get placeholder with only baseURI updated", async () => {
+		await mint(addr1, addr1)
 		const newBase = 'https://new.milkytaste.xyz/'
 		const tx = await milkToken.setBaseURI(newBase)
 		await tx.wait()
-		const uri = await milkToken.tokenURI(1)
+		let uri = await milkToken.tokenURI(1)
+		expect(uri).to.equal(`${newBase}1.json`)
+		uri = await milkToken.tokenURI(2)
 		expect(uri).to.equal(PLACEHOLDER_URI)
 	})
 
@@ -129,36 +135,50 @@ describe("MilkToken", () => {
 	})
 
 	it("Should have first token revealed after deployment", async () => {
-		const tx = await milkToken.setRevealedTo(1)
-		await tx.wait()
 		const uri = await milkToken.tokenURI(1)
 		expect(uri).to.equal(`${BASE_URI}1.json`)
 	})
 
-	it("Should get placeholder when above revealTo", async () => {
+	it("Should not let non-owner reveal", async () => {
 		await mint(addr1, addr1)
-		const tx = await milkToken.setRevealedTo(1)
-		await tx.wait()
+		
+		await expect(
+			milkToken.connect(addr2).revealToken(2)
+		).to.be.revertedWith('Ownable: caller is not the owner')
+	})
+
+	it("Should get placeholder when unrevealed", async () => {
+		await mint(addr1, addr1)
 		const uri = await milkToken.tokenURI(2)
 		expect(uri).to.equal(PLACEHOLDER_URI)
+	})
+
+	it("Should reveal a specific token only", async () => {
+		await mint(addr1, addr1)
+		await mint(addr2, addr2)
+		const tx = await milkToken.revealToken(3)
+		await tx.wait()
+		let uri = await milkToken.tokenURI(2)
+		expect(uri).to.equal(PLACEHOLDER_URI)
+		uri = await milkToken.tokenURI(3)
+		expect(uri).to.equal(`${BASE_URI}3.json`)
 	})
 
 	it("Should get real URI with base and revealed", async () => {
 		const newBase = 'https://new.milkytaste.xyz/'
 		let tx = await milkToken.setBaseURI(newBase)
 		await tx.wait()
-		tx = await milkToken.setRevealedTo(1)
+		await mint(addr1, addr1)
+		tx = await milkToken.revealToken(2)
 		await tx.wait()
-		const uri = await milkToken.tokenURI(1)
-		expect(uri).to.equal(`${newBase}1.json`)
+		const uri = await milkToken.tokenURI(2)
+		expect(uri).to.equal(`${newBase}2.json`)
 	})
 
 	it("Should get placeholder after resetting placeholder", async () => {
 		const newBase = 'https://new.milkytaste.xyz/'
 		const newPlaceholder = 'https://not.milkytaste.xyz/'
 		let tx = await milkToken.setBaseURI(newBase)
-		await tx.wait()
-		tx = await milkToken.setRevealedTo(1)
 		await tx.wait()
 		tx = await milkToken.setPlaceholderURI(newPlaceholder)
 		await tx.wait()
