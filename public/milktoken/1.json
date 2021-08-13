@@ -1,5 +1,5 @@
 {
-  "description": "The original token of affection from your buddy MilkyTaste.",
+  "description": "A token of self love.",
   "external_url": "https://milkytaste.xyz",
   "image": "https://milkytaste.xyz/milktoken/1.png",
   "name": "MilkToken #1",
@@ -14,7 +14,11 @@
       "value": 1
     },
     {
-      "trait_type": "Colour",
+      "trait_type": "Foreground",
+      "value": "Blue"
+    },
+    {
+      "trait_type": "Background",
       "value": "Blue"
     },
     {
