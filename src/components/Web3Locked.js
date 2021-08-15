@@ -24,7 +24,7 @@ const Web3Locked = ({ children }) => {
 	const connect = async () => {
 		web3Modal.clearCachedProvider()
 		const provider = await web3Modal.connect()
-		dispatch({ type: "set", payload: provider })
+		dispatch({ type: "SET_provider", payload: provider })
 	}
 
 	if (state.provider == null){

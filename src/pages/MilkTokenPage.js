@@ -8,8 +8,8 @@ import Web3Locked from '../components/Web3Locked';
 import Button from '../components/Button';
 import { useWeb3 } from '../context/Web3Context';
 import { getOpenseaUrl, getContractAddress, getEthersContract } from "../util/contracts";
-import { trimAddress } from "../util/addressUtil";
-import { ERROR_CODE_TX_REJECTED_BY_USER } from '../util/constants';
+import { trimAddress } from "../util/stringUtils";
+import { ERROR_CODE_TX_REJECTED_BY_USER, RINKEBY_NETWORK_ID } from '../util/constants';
 
 const Tilt = styled(PageContent)`
 	& * {
@@ -21,11 +21,12 @@ const Tilt = styled(PageContent)`
 `
 
 const MilkTokenPage = () => {
-	const { state: {provider, address} } = useWeb3()
+	const { state: {provider, address, chainId} } = useWeb3()
 	const [loadingTokenList, setLoadingTokenList] = useState(true)
 	const [hasToken, setHasToken] = useState(null)
 	const [isMinting, setIsMinting] = useState(false)
 	const [mintingError, setMintingError] = useState(null)
+	const [networkError, setNetworkError] = useState(null)
 
 	const updateTokenList = () => {
 		setLoadingTokenList(true)
@@ -40,10 +41,16 @@ const MilkTokenPage = () => {
 	}
 
 	useEffect(() => {
-		if (provider && address) {
-			updateTokenList()
+		if (provider && address && chainId) {
+			if (chainId !== RINKEBY_NETWORK_ID) {
+				// Rinkeby only
+				setNetworkError("Invalid network selected.\nPlease change to Rinkeby!")
+			} else {
+				setNetworkError(null)
+				updateTokenList()
+			}
 		}
-	}, [provider, address])
+	}, [provider, address, chainId])
 
 	const mint = async () => {
 		if (provider && address) {
@@ -56,7 +63,7 @@ const MilkTokenPage = () => {
 				const reciept = await tx.wait()
 				if (reciept?.status !== 0) {
 					// Success
-					updateTokenList()
+					updateTokenList(true)
 				} else {
 					// Error
 					throw new Error("Transaction failed")
@@ -86,7 +93,9 @@ const MilkTokenPage = () => {
 				</p>
 				<Web3Locked>
 					{loadingTokenList ? <p>Loading...</p> : (
-						isMinting ? (
+						networkError ? (
+							<p className="red">{networkError.split('\n').map(s => <>{s}<br/></>)}</p>
+						) : isMinting ? (
 							<p>Waiting for confirmation...</p>
 						) : hasToken ? (
 							<p>
@@ -103,7 +112,7 @@ const MilkTokenPage = () => {
 								<p>
 									{btn}
 								</p>
-								{mintingError && <p>{mintingError}</p>}
+								{mintingError && <p className="red">{mintingError}</p>}
 							</>
 						)
 					)}

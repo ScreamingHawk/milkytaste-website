@@ -1,15 +1,23 @@
 // https://kentcdodds.com/blog/how-to-use-react-context-effectively
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer, useEffect } from 'react';
 
 const Web3Context = createContext()
 
 const web3Reducer = (state, action) => {
 	switch (action.type) {
-		case 'set': {
+		case 'SET_provider': {
 			const provider = action.payload
 			return {
+				...state,
 				provider,
 				address: provider?.selectedAddress,
+				chainId: window.ethereum.networkVersion,
+			}
+		}
+		case 'SET_chainId': {
+			return {
+				...state,
+				chainId: action.payload,
 			}
 		}
 		default: {
@@ -19,7 +27,29 @@ const web3Reducer = (state, action) => {
 }
 
 const Web3Provider = ({children}) => {
-	const [state, dispatch] = useReducer(web3Reducer, {provider: null})
+	const [state, dispatch] = useReducer(web3Reducer, {provider: null, address: null})
+
+	const { provider } = state;
+
+	// Network listener
+	useEffect(() => {
+		if (provider) {
+			const onChainChanged = async chainId => {
+				const _chainId = `${parseInt(Number(chainId), 10)}`
+				dispatch({
+					type: 'SET_chainId',
+					payload: _chainId,
+				})
+			}
+			window.ethereum.on('chainChanged', onChainChanged)
+			return () => {
+				if (typeof window?.ethereum?.off === 'function') {
+					window.ethereum.off('chainChanged', onChainChanged)
+				}
+			}
+		}
+	}, [provider])
+
 	const value = { state, dispatch }
 	return <Web3Context.Provider value={value}>{children}</Web3Context.Provider>
 }
