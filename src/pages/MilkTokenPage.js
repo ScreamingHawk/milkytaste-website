@@ -22,22 +22,31 @@ const Tilt = styled(PageContent)`
 
 const MilkTokenPage = () => {
 	const { state: {provider, address, chainId} } = useWeb3()
-	const [loadingTokenList, setLoadingTokenList] = useState(true)
-	const [hasToken, setHasToken] = useState(null)
+	const [loadingTokenDetails, setLoadingTokenDetails] = useState(false)
+	const [tokenDetails, setTokenDetails] = useState(null)
 	const [isMinting, setIsMinting] = useState(false)
 	const [mintingError, setMintingError] = useState(null)
 	const [networkError, setNetworkError] = useState(null)
 
-	const updateTokenList = () => {
-		setLoadingTokenList(true)
-		const milkToken = getEthersContract("MilkToken", provider)
-		milkToken.tokenOfOwnerByIndex(address, 0).then(tokenId => {
-			setHasToken(tokenId.toNumber())
-			setLoadingTokenList(false)
-		}).catch(() => {
+	const updateTokenDetails = async () => {
+		setLoadingTokenDetails(true)
+		let details = {}
+		try {
+			const milkToken = getEthersContract("MilkToken", provider)
+			console.log("cap")
+			const supplyCap = await milkToken.supplyCap()
+			details.supplyCap = supplyCap.toNumber()
+			const totalSupply = await milkToken.totalSupply()
+			details.totalSupply = totalSupply.toNumber()
+			// Do this last for error handling
+			const tokenId = await milkToken.tokenOfOwnerByIndex(address, 0)
+			details.hasToken = tokenId.toNumber()
+		} catch (err) {
 			// No tokens
-			setLoadingTokenList(false)
-		})
+		} finally {
+			setTokenDetails(details)
+			setLoadingTokenDetails(false)
+		}
 	}
 
 	useEffect(() => {
@@ -47,7 +56,7 @@ const MilkTokenPage = () => {
 				setNetworkError("Invalid network selected.\nPlease change to Rinkeby!")
 			} else {
 				setNetworkError(null)
-				updateTokenList()
+				updateTokenDetails()
 			}
 		}
 	}, [provider, address, chainId])
@@ -63,7 +72,7 @@ const MilkTokenPage = () => {
 				const reciept = await tx.wait()
 				if (reciept?.status !== 0) {
 					// Success
-					updateTokenList(true)
+					updateTokenDetails()
 				} else {
 					// Error
 					throw new Error("Transaction failed")
@@ -88,35 +97,36 @@ const MilkTokenPage = () => {
 			<Header hasWave={true} />
 			<Tilt>
 				<CircleImg src="https://milkytaste.xyz/milktoken/placeholder.png" alt="Milk Token" />
-				<p>
-					<i><b>Note:</b> This feature is only available on Rinkeby!</i>
-				</p>
 				<Web3Locked>
-					{loadingTokenList ? <p>Loading...</p> : (
+					{loadingTokenDetails ? <p>Loading...</p> : (
 						networkError ? (
 							<p className="red">{networkError.split('\n').map(s => <>{s}<br/></>)}</p>
 						) : isMinting ? (
 							<p>Waiting for confirmation...</p>
-						) : hasToken ? (
-							<p>
-								You own
-								{' '}
-								<a href={`${getOpenseaUrl()}/assets/${getContractAddress("MilkToken")}/${hasToken}`}>Milk Token #{hasToken}</a>
-								!
-							</p>
 						) : (
 							<>
-								<p>
-									Mint a Milk Token to <code>{trimAddress(address)}</code>
-								</p>
-								<p>
-									{btn}
-								</p>
-								{mintingError && <p className="red">{mintingError}</p>}
+								<p>Currently minted: {tokenDetails?.totalSupply}/{tokenDetails?.supplyCap}</p>
+								{tokenDetails?.hasToken ? (
+									<p>
+										You own
+										{' '}
+										<a href={`${getOpenseaUrl()}/assets/${getContractAddress("MilkToken")}/${tokenDetails.hasToken}`}>Milk Token #{tokenDetails.hasToken}</a>
+										!
+									</p>
+								) : (
+									<>
+										<p>
+											Mint a Milk Token to <code>{trimAddress(address)}</code>
+										</p>
+										<p>
+											{btn}
+										</p>
+										{mintingError && <p className="red">{mintingError}</p>}
+									</>
+								)}
 							</>
 						)
 					)}
-					
 				</Web3Locked>
 				<p>
 					Milk Tokens are a token of appreciation from MilkyTaste.
