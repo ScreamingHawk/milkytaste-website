@@ -6,7 +6,7 @@ import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 import '@openzeppelin/contracts/utils/Counters.sol';
 
 contract MilkToken is ERC721Enumerable, Ownable {
-	
+
 	using Strings for uint256;
 	using Counters for Counters.Counter;
 	Counters.Counter private _tokenIds;
@@ -15,15 +15,15 @@ contract MilkToken is ERC721Enumerable, Ownable {
 	string private placeholderURI;
 	string private baseURI;
 
-	uint256 private _supplyCap;
+	uint256 public tokenPrice = 1000000000000000; // 0.001 ETH
+	uint256 private _supplyCap = 100;
 
 	mapping(uint256 => bool) private _tokenRevealed;
 
 	constructor() ERC721('MilkToken', 'MILK') {
 		placeholderURI = 'https://milkytaste.xyz/milktoken/placeholder.json';
 		baseURI = 'https://milkytaste.xyz/milktoken/';
-		_supplyCap = 100;
-		mintToken(_msgSender());
+		doMintToken(_msgSender());
 		_tokenRevealed[1] = true;
 	}
 
@@ -37,6 +37,21 @@ contract MilkToken is ERC721Enumerable, Ownable {
 
 	function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual override canOwnMore(to) {
 		super._beforeTokenTransfer(from, to, tokenId);
+	}
+
+	/**
+	 * @dev Withdraw funds to owner address.
+	 */
+	function withdraw(address payable withdrawTo) public onlyOwner {
+		uint balance = address(this).balance;
+		withdrawTo.transfer(balance);
+	}
+
+	/**
+	 * @dev Withdraw funds to owner address.
+	 */
+	function setTokenPrice(uint256 newTokenPrice) public onlyOwner {
+		tokenPrice = newTokenPrice;
 	}
 
 	/**
@@ -72,7 +87,7 @@ contract MilkToken is ERC721Enumerable, Ownable {
 	 * @dev See {IERC721Metadata-tokenURI}.
 	 */
 	function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-		require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+		require(_exists(tokenId), "MilkToken: URI query for nonexistent token");
 
 		if (_tokenRevealed[tokenId] && bytes(baseURI).length > 0) {
 			return string(abi.encodePacked(baseURI, tokenId.toString(), '.json'));
@@ -84,7 +99,22 @@ contract MilkToken is ERC721Enumerable, Ownable {
 	/**
 	 * @dev Mints a new token
 	 */
-	function mintToken(address addr) public canOwnMore(addr) returns (uint256) {
+	function mintToken(address addr) public canOwnMore(addr) payable returns (uint256) {
+		require(msg.value == tokenPrice, "MilkToken: ether value incorrect");
+		return doMintToken(addr);
+	}
+
+	/**
+	 * @dev Owner can mint for free
+	 */
+	function ownerMintToken(address addr) public onlyOwner returns (uint256) {
+		return doMintToken(addr);
+	}
+
+	/**
+	 * @dev Do the minting here
+	 */
+	function doMintToken(address addr) internal canOwnMore(addr) returns (uint256) {
 		require(_tokenIds.current() < _supplyCap, 'MilkToken: supply cap reached');
 
 		_tokenIds.increment();

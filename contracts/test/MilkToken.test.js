@@ -1,14 +1,16 @@
-const { expect } = require("chai")
+const { expect } = require("chai");
+const { BigNumber } = require("ethers");
 
 const PLACEHOLDER_URI = 'https://milkytaste.xyz/milktoken/placeholder.json'
 const BASE_URI = 'https://milkytaste.xyz/milktoken/'
+const TOKEN_PRICE = 1000000000000000;
 
 describe("MilkToken", () => {
 
 	let MilkToken, milkToken, owner, addr1, addr2
 
 	const mint = async (from, to) => {
-		const tx = await milkToken.connect(from).mintToken(to.address)
+		const tx = await milkToken.connect(from).mintToken(to.address, {value: TOKEN_PRICE})
 		await tx.wait();
 	}
 
@@ -28,6 +30,34 @@ describe("MilkToken", () => {
 		expect(await milkToken.owner()).to.equal(addr1.address)
 	})
 
+	it("Should allow free minting by owner", async () => {
+		const tx = await milkToken.ownerMintToken(addr1.address)
+		await tx.wait()
+		expect(await milkToken.balanceOf(addr1.address)).to.equal(1)
+	})
+
+	it("Should not allow free minting by non owner", async () => {
+		await expect(
+			milkToken.connect(addr1).ownerMintToken(addr1.address)
+		).to.be.revertedWith('Ownable: caller is not the owner')
+	})
+
+	it("Should allow free minting by transferred owner", async () => {
+		let tx = await milkToken.transferOwnership(addr1.address)
+		await tx.wait()
+		tx = await milkToken.connect(addr1).ownerMintToken(addr1.address)
+		await tx.wait()
+		expect(await milkToken.balanceOf(addr1.address)).to.equal(1)
+	})
+
+	it("Should not allow free minting by old owner", async () => {
+		let tx = await milkToken.transferOwnership(addr1.address)
+		await tx.wait()
+		await expect(
+			milkToken.ownerMintToken(addr1.address)
+		).to.be.revertedWith('Ownable: caller is not the owner')
+	})
+
 	it("Should mint 1 to deployer", async () => {
 		expect(await milkToken.totalSupply()).to.equal(1)
 		expect(await milkToken.balanceOf(owner.address)).to.equal(1)
@@ -38,6 +68,37 @@ describe("MilkToken", () => {
 
 		expect(await milkToken.totalSupply()).to.equal(2)
 		expect(await milkToken.balanceOf(addr1.address)).to.equal(1)
+	})
+
+	it("Should require ether", async () => {
+		await expect(
+			milkToken.connect(addr1).mintToken(addr1.address)
+		).to.be.revertedWith('MilkToken: ether value incorrect')
+	})
+
+	it("Should require correct ether", async () => {
+		await expect(
+			milkToken.connect(addr1).mintToken(addr1.address, { value: TOKEN_PRICE + 1 })
+		).to.be.revertedWith('MilkToken: ether value incorrect')
+	})
+
+	it("Should allow minting after price set", async () => {
+		const tokenPrice = TOKEN_PRICE / 2
+		let tx = await milkToken.setTokenPrice(tokenPrice)
+		await tx.wait()
+		tx = await milkToken.connect(addr1).mintToken(addr1.address, { value: tokenPrice })
+		await tx.wait()
+		expect(await milkToken.totalSupply()).to.equal(2)
+		expect(await milkToken.balanceOf(addr1.address)).to.equal(1)
+	})
+
+	it("Should require correct ether after price set", async () => {
+		const tokenPrice = TOKEN_PRICE / 2
+		let tx = await milkToken.setTokenPrice(tokenPrice)
+		await tx.wait()
+		await expect(
+			milkToken.connect(addr1).mintToken(addr1.address, { value: TOKEN_PRICE })
+		).to.be.revertedWith('MilkToken: ether value incorrect')
 	})
 
 	it("Should allow owner to mint to new address", async () => {
@@ -51,7 +112,7 @@ describe("MilkToken", () => {
 		await mint(addr1, addr1)
 
 		await expect(
-			milkToken.connect(addr1).mintToken(addr1.address)
+			milkToken.connect(addr1).mintToken(addr1.address, {value: TOKEN_PRICE})
 		).to.be.revertedWith('MilkToken: cannot own more MilkTokens')
 
 		expect(await milkToken.totalSupply()).to.equal(2)
@@ -63,7 +124,7 @@ describe("MilkToken", () => {
 		await tx.wait()
 
 		await expect(
-			milkToken.connect(addr1).mintToken(addr1.address)
+			milkToken.connect(addr1).mintToken(addr1.address, {value: TOKEN_PRICE})
 		).to.be.revertedWith('MilkToken: cannot own more MilkTokens')
 
 		expect(await milkToken.totalSupply()).to.equal(1)
@@ -100,13 +161,27 @@ describe("MilkToken", () => {
 		await mint(addr1, addr1)
 
 		await expect(
-			milkToken.connect(addr2).mintToken(addr2.address)
+			milkToken.connect(addr2).mintToken(addr2.address, {value: TOKEN_PRICE})
 		).to.be.revertedWith('MilkToken: supply cap reached')
 
 		expect(await milkToken.totalSupply()).to.equal(2)
 		expect(await milkToken.balanceOf(owner.address)).to.equal(1)
 		expect(await milkToken.balanceOf(addr1.address)).to.equal(1)
 		expect(await milkToken.balanceOf(addr2.address)).to.equal(0)
+	})
+
+	it("Should allow withdrawal", async () => {
+		await mint(addr1, addr1)
+		await mint(addr2, addr2)
+
+		const oldBalance = await owner.getBalance()
+
+		const tx = await milkToken.withdraw(owner.address)
+		await tx.wait()
+
+		// Consider gas
+		const gasDiff = BigNumber.from("50000000000000")
+		expect((await owner.getBalance())).to.be.closeTo(oldBalance.add(TOKEN_PRICE * 2), gasDiff)
 	})
 
 	it("Should get placeholder URI", async () => {
