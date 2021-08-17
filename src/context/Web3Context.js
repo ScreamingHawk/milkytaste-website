@@ -14,6 +14,12 @@ const web3Reducer = (state, action) => {
 				chainId: window.ethereum.networkVersion,
 			}
 		}
+		case 'SET_address': {
+			return {
+				...state,
+				address: action.payload,
+			}
+		}
 		case 'SET_chainId': {
 			return {
 				...state,
@@ -29,26 +35,38 @@ const web3Reducer = (state, action) => {
 const Web3Provider = ({children}) => {
 	const [state, dispatch] = useReducer(web3Reducer, {provider: null, address: null})
 
-	const { provider } = state;
-
 	// Network listener
 	useEffect(() => {
-		if (provider) {
-			const onChainChanged = async chainId => {
-				const _chainId = `${parseInt(Number(chainId), 10)}`
-				dispatch({
-					type: 'SET_chainId',
-					payload: _chainId,
-				})
-			}
-			window.ethereum.on('chainChanged', onChainChanged)
-			return () => {
-				if (typeof window?.ethereum?.off === 'function') {
-					window.ethereum.off('chainChanged', onChainChanged)
-				}
+		const onChainChanged = async chainId => {
+			const _chainId = `${parseInt(Number(chainId), 10)}`
+			dispatch({
+				type: 'SET_chainId',
+				payload: _chainId,
+			})
+		}
+		window.ethereum.on('chainChanged', onChainChanged)
+		return () => {
+			if (typeof window?.ethereum?.off === 'function') {
+				window.ethereum.off('chainChanged', onChainChanged)
 			}
 		}
-	}, [provider])
+	})
+
+	// Address listener
+	useEffect(() => {
+		const onAccountChanged = async addrs => {
+			dispatch({
+				type: 'SET_address',
+				payload: addrs[0],
+			})
+		}
+		window.ethereum.on('accountsChanged', onAccountChanged)
+		return () => {
+			if (typeof window?.ethereum?.off === 'function') {
+				window.ethereum.off('accountsChanged', onAccountChanged)
+			}
+		}
+	})
 
 	const value = { state, dispatch }
 	return <Web3Context.Provider value={value}>{children}</Web3Context.Provider>

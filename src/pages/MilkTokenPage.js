@@ -34,7 +34,6 @@ const MilkTokenPage = () => {
 		let details = {}
 		try {
 			const milkToken = getEthersContract("MilkToken", provider)
-			console.log("cap")
 			const tokenPrice = await milkToken.tokenPrice()
 			details.tokenPrice = tokenPrice
 			const supplyCap = await milkToken.supplyCap()
@@ -53,7 +52,7 @@ const MilkTokenPage = () => {
 	}
 
 	useEffect(() => {
-		if (provider && address && chainId) {
+		if (provider && address) {
 			if (chainId !== RINKEBY_NETWORK_ID) {
 				// Rinkeby only
 				setNetworkError("Invalid network selected.\nPlease change to Rinkeby!")
