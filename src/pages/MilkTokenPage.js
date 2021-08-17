@@ -10,6 +10,7 @@ import { useWeb3 } from '../context/Web3Context';
 import { getOpenseaUrl, getContractAddress, getEthersContract } from "../util/contracts";
 import { trimAddress } from "../util/stringUtils";
 import { ERROR_CODE_TX_REJECTED_BY_USER, RINKEBY_NETWORK_ID } from '../util/constants';
+import { utils } from 'ethers';
 
 const Tilt = styled(PageContent)`
 	& * {
@@ -34,6 +35,8 @@ const MilkTokenPage = () => {
 		try {
 			const milkToken = getEthersContract("MilkToken", provider)
 			console.log("cap")
+			const tokenPrice = await milkToken.tokenPrice()
+			details.tokenPrice = tokenPrice
 			const supplyCap = await milkToken.supplyCap()
 			details.supplyCap = supplyCap.toNumber()
 			const totalSupply = await milkToken.totalSupply()
@@ -65,7 +68,7 @@ const MilkTokenPage = () => {
 		if (provider && address) {
 			const milkToken = getEthersContract("MilkToken", provider)
 			try {
-				const tx = await milkToken.mintToken(address)
+				const tx = await milkToken.mintToken(address, {value: tokenDetails.tokenPrice.toNumber()})
 				// Wait for mint to succeed
 				setMintingError(null)
 				setIsMinting(true)
@@ -90,7 +93,7 @@ const MilkTokenPage = () => {
 		}
 	}
 
-	let btn = isMinting ? <p>Waiting for confirmation...</p> : <Button onClick={mint}>Mint Milk Token</Button>
+	let btn = isMinting ? <p className="red">Waiting for confirmation...</p> : <Button onClick={mint}>Mint Milk Token</Button>
 
 	return (
 		<>
@@ -131,7 +134,9 @@ const MilkTokenPage = () => {
 				<p>
 					Milk Tokens are a token of appreciation from MilkyTaste.
 					<br/>
-					Mint your token for <b>FREE</b> and then <Link to="/contact">contact me</Link> to have your token revealed.
+					Mint your token
+					{tokenDetails?.tokenPrice ? ` for ${utils.formatEther(tokenDetails.tokenPrice)}Ξ ` : ' '}
+					and then <Link to="/contact">contact me</Link> to have your token revealed.
 				</p>
 				<p>
 					Each wallet can only hold <b>1</b> Milk Token.
