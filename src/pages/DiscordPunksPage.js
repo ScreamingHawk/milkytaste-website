@@ -25,11 +25,14 @@ const DiscordPunksPage = () => {
           <br />
           You can see the item sold, from and to who, prices in ΞETH and $USD.
           <br />
-          Listings, sales and big sales (those with a price multiples higher than the floor price!) are all posted in different channels.
-          <br />
           The floor price (cheapest listing) is displayed as a channel notification meaning no user interaction required.
           <br />
           Specific metadata elements are visible in the embedded post and the colouring is styled to match the rarity.
+        </p>
+        <p>
+          Listings, sales and big sales (those with a price multiples higher than the floor price!) are all posted in different channels.
+          <br />
+          The big sales are also posted to an associated Twitter account.
         </p>
         <ImageList>
           {punks_floor}

@@ -1,17 +1,25 @@
+import styled from "styled-components"
 import { RoundedImg } from "./Image"
+
+const ImgContainer = styled.p`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`
+
+const SpacedImg = styled(RoundedImg)`
+	margin: 4px 0;
+`
 
 const ImageList = ({ children }) => {
 	const childs = children.map ? children : [children]
 
 	return (
-		<p>
+		<ImgContainer>
 			{childs.map(c => (
-				<>
-					<RoundedImg src={c} />
-					<br/>
-				</>
+				<SpacedImg src={c} />
 			))}
-		</p>
+		</ImgContainer>
 	)
 }
 
