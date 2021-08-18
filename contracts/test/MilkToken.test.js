@@ -3,7 +3,7 @@ const { BigNumber } = require("ethers");
 
 const PLACEHOLDER_URI = 'https://milkytaste.xyz/milktoken/placeholder.json'
 const BASE_URI = 'https://milkytaste.xyz/milktoken/'
-const TOKEN_PRICE = 1000000000000000;
+const TOKEN_PRICE = BigNumber.from("5000000000000000");
 
 describe("MilkToken", () => {
 
@@ -181,7 +181,7 @@ describe("MilkToken", () => {
 
 		// Consider gas
 		const gasDiff = BigNumber.from("50000000000000")
-		expect((await owner.getBalance())).to.be.closeTo(oldBalance.add(TOKEN_PRICE * 2), gasDiff)
+		expect((await owner.getBalance())).to.be.closeTo(oldBalance.add(TOKEN_PRICE.mul(2)), gasDiff)
 	})
 
 	it("Should get placeholder URI", async () => {

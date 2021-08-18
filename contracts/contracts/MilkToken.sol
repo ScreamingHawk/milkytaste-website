@@ -15,8 +15,8 @@ contract MilkToken is ERC721Enumerable, Ownable {
 	string private placeholderURI;
 	string private baseURI;
 
-	uint256 public tokenPrice = 1000000000000000; // 0.001 ETH
-	uint256 private _supplyCap = 100;
+	uint256 public tokenPrice = 5000000000000000; // 0.005 ETH
+	uint256 private _supplyCap = 25;
 
 	mapping(uint256 => bool) private _tokenRevealed;
 
