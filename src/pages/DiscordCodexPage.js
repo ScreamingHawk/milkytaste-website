@@ -1,9 +1,11 @@
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import { CircleImg } from '../components/Image';
 import ImageList from '../components/ImageList';
 import PageContent from '../components/PageContent';
+import SeeMore from '../components/SeeMore';
 
 import codex from '../images/codex.jpg';
 import codex_sale from '../images/codex_sale.png';
@@ -35,6 +37,7 @@ const DiscordCodexPage = () => {
         <p>
           Check it out for yourself in the <a href="https://discord.gg/rV3SKTJeKk"><FontAwesomeIcon icon={faDiscord} /> Parallel Discord</a>.
         </p>
+        <SeeMore link={<Link to="/discord">Discord bots</Link>} />
       </PageContent>
     </>
   )

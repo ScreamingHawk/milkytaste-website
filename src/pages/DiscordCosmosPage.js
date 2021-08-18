@@ -1,9 +1,11 @@
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import { CircleImg } from '../components/Image';
 import ImageList from '../components/ImageList';
 import PageContent from '../components/PageContent';
+import SeeMore from '../components/SeeMore';
 
 import cosmos from '../images/cosmos.png';
 import cosmos_events from '../images/cosmos_events.png';
@@ -33,6 +35,7 @@ const DiscordCosmosPage = () => {
         <p>
           Check it out for yourself in the <a href="https://discord.gg/67BXUzDr3M"><FontAwesomeIcon icon={faDiscord} /> Influence Discord</a>.
         </p>
+        <SeeMore link={<Link to="/discord">Discord bots</Link>} />
       </PageContent>
     </>
   )

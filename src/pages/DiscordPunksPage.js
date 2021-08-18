@@ -1,9 +1,11 @@
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import { CircleImg } from '../components/Image';
 import ImageList from '../components/ImageList';
 import PageContent from '../components/PageContent';
+import SeeMore from '../components/SeeMore';
 
 import punks from '../images/punks.png';
 import punks_floor from '../images/punks_floor.png';
@@ -42,6 +44,7 @@ const DiscordPunksPage = () => {
         <p>
           Check it out for yourself in the <a href="https://discord.gg/E7zMH4jby5"><FontAwesomeIcon icon={faDiscord} /> COVIDPunks! Discord</a>.
         </p>
+        <SeeMore link={<Link to="/discord">Discord bots</Link>} />
       </PageContent>
     </>
   )
