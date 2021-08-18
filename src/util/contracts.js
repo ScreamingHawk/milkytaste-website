@@ -2,7 +2,7 @@ import { ethers } from "ethers"
 import { MAINNET_NETWORK_ID, RINKEBY_NETWORK_ID, NETWORK_DETAILS } from "./constants"
 
 const getNetworkDetails = () => {
-	const network = window.ethereum.networkVersion
+	const network = window?.ethereum?.networkVersion
 	if (network && NETWORK_DETAILS[network]) {
 		return NETWORK_DETAILS[network]
 	}
@@ -42,7 +42,7 @@ contracts[MAINNET_NETWORK_ID] = mainnetContracts
 
 // Safely get the contract details for the connected network
 export const getContract = name => {
-	const network = window.ethereum.networkVersion
+	const network = window?.ethereum?.networkVersion
 	if (network && contracts[network] && contracts[network][name]) {
 		return contracts[network][name]
 	}
@@ -50,7 +50,7 @@ export const getContract = name => {
 }
 
 export const getContractAddress = name => {
-	const network = window.ethereum.networkVersion
+	const network = window?.ethereum?.networkVersion
 	if (network && contracts[network] && contracts[network]['addresses']) {
 		return contracts[network]['addresses'][name]
 	}

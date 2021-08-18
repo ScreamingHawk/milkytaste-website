@@ -11,7 +11,7 @@ const web3Reducer = (state, action) => {
 				...state,
 				provider,
 				address: provider?.selectedAddress,
-				chainId: window.ethereum.networkVersion,
+				chainId: window?.ethereum?.networkVersion,
 			}
 		}
 		case 'SET_address': {
@@ -44,7 +44,9 @@ const Web3Provider = ({children}) => {
 				payload: _chainId,
 			})
 		}
-		window.ethereum.on('chainChanged', onChainChanged)
+		if (typeof window?.ethereum?.on === 'function') {
+			window.ethereum.on('chainChanged', onChainChanged)
+		}
 		return () => {
 			if (typeof window?.ethereum?.off === 'function') {
 				window.ethereum.off('chainChanged', onChainChanged)
@@ -60,7 +62,9 @@ const Web3Provider = ({children}) => {
 				payload: addrs[0],
 			})
 		}
-		window.ethereum.on('accountsChanged', onAccountChanged)
+		if (typeof window?.ethereum?.on === 'function') {
+			window.ethereum.on('accountsChanged', onAccountChanged)
+		}
 		return () => {
 			if (typeof window?.ethereum?.off === 'function') {
 				window.ethereum.off('accountsChanged', onAccountChanged)
