@@ -11,7 +11,7 @@ async function main() {
 
 	console.log(
 		'Account balance before:',
-		(await deployer.getBalance()).toString()
+		ethers.utils.formatEther(await deployer.getBalance())
 	)
 
 	const MilkToken = await hre.ethers.getContractFactory("MilkToken");
@@ -21,7 +21,7 @@ async function main() {
 
 	console.log(
 		'Account balance after:',
-		(await deployer.getBalance()).toString()
+		ethers.utils.formatEther(await deployer.getBalance())
 	)
 
 	console.log("MilkToken deployed to:", milkToken.address);
