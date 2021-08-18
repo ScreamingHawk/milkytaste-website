@@ -1,5 +1,5 @@
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Switch,
   Route,
 } from "react-router-dom";
@@ -16,7 +16,7 @@ import DiscordPunksPage from './pages/DiscordPunksPage';
 
 const Routing = () => {
   return (
-    <Router>
+    <Router basename='/'>
       <Switch>
         <Route path="/discord/cosmos">
           <DiscordCosmosPage />
@@ -42,7 +42,7 @@ const Routing = () => {
         <Route path="/contact">
           <ContactMePage />
         </Route>
-        <Route path="/">
+        <Route exact path="/">
           <LandingPage />
         </Route>
       </Switch>
