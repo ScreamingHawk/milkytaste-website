@@ -7,4 +7,5 @@ export const CircleImg = styled.img`
 
 export const RoundedImg = styled.img`
 	border-radius: 0.5em;
+	max-width: 100%;
 `

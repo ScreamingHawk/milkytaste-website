@@ -9,6 +9,7 @@ const PageContent = styled.main`
 	justify-content: center;
 	font-size: calc(10px + 2vmin);
 	color: white;
+	margin: 12px;
 `
 
 export default PageContent
