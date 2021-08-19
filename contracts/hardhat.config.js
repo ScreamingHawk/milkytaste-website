@@ -4,9 +4,11 @@ require("@nomiclabs/hardhat-etherscan");
 require("hardhat-gas-reporter");
 
 const {
-	ALCHEMY_API_KEY,
 	ETHERSCAN_API_KEY,
+	RINKEBY_ALCHEMY_API_KEY,
 	RINKEBY_PRIVATE_KEY,
+	MAINNET_ALCHEMY_API_KEY,
+	MAINNET_PRIVATE_KEY,
 } = process.env
 
 // https://hardhat.org/guides/create-task.html
@@ -25,8 +27,12 @@ module.exports = {
 	solidity: "0.8.4",
 	networks: {
 		rinkeby: {
-			url: `https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
+			url: `https://eth-rinkeby.alchemyapi.io/v2/${RINKEBY_ALCHEMY_API_KEY}`,
 			accounts: [`0x${RINKEBY_PRIVATE_KEY}`],
+		},
+		mainnet: {
+			url: `https://eth-mainnet.alchemyapi.io/v2/${MAINNET_ALCHEMY_API_KEY}`,
+			accounts: [`0x${MAINNET_PRIVATE_KEY}`],
 		},
 	},
 	etherscan: {

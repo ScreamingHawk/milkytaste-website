@@ -24,7 +24,9 @@
     "predeploy": "yarn compile",
     "deploy": "hardhat run scripts/deploy.js",
     "deploy:rinkeby": "yarn deploy --network rinkeby",
-    "verify:rinkeby": "hardhat verify --network rinkeby"
+    "deploy:mainnet": "yarn deploy --network mainnet",
+    "verify:rinkeby": "hardhat verify --network rinkeby",
+    "verify:mainnet": "hardhat verify --network mainnet"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.2.0"
