@@ -9,7 +9,7 @@ import Button from '../components/Button';
 import { useWeb3 } from '../context/Web3Context';
 import { getOpenseaUrl, getContractAddress, getEthersContract } from "../util/contracts";
 import { trimAddress } from "../util/stringUtils";
-import { ERROR_CODE_TX_REJECTED_BY_USER, RINKEBY_NETWORK_ID } from '../util/constants';
+import { ERROR_CODE_TX_REJECTED_BY_USER, MAINNET_NETWORK_ID, RINKEBY_NETWORK_ID } from '../util/constants';
 import { utils } from 'ethers';
 
 const Tilt = styled(PageContent)`
@@ -53,8 +53,8 @@ const MilkTokenPage = () => {
 
 	useEffect(() => {
 		if (provider && address) {
-			if (chainId !== RINKEBY_NETWORK_ID) {
-				// Rinkeby only
+			if (chainId !== RINKEBY_NETWORK_ID && chainId !== MAINNET_NETWORK_ID) {
+				// Recommend Rinkeby
 				setNetworkError("Invalid network selected.\nPlease change to Rinkeby!")
 			} else {
 				setNetworkError(null)
