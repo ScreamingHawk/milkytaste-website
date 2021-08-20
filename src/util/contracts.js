@@ -15,7 +15,7 @@ export const getNetworkName = () => {
 
 export const getOpenseaUrl = () => {
 	const details = getNetworkDetails()
-	return details ? details.opensea : ''
+	return details ? details.opensea : 'https://opensea.io' // Default to mainnet
 }
 
 let mainnetContracts, rinkebyContracts

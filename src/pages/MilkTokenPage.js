@@ -140,6 +140,7 @@ const MilkTokenPage = () => {
 				<p>
 					Each wallet can only hold <b>1</b> Milk Token.
 				</p>
+				<p>Check them out on <a href={`${getOpenseaUrl()}/collection/milktoken`}>OpenSea</a>.</p>
 			</Tilt>
 		</>
 	)
