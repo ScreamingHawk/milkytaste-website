@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/static/css/main.25fa5b24.chunk.css",
-    "main.js": "/static/js/main.19701662.chunk.js",
-    "runtime-main.js": "/static/js/runtime-main.4ed5b91d.js",
-    "static/js/2.c7c9350f.chunk.js": "/static/js/2.c7c9350f.chunk.js",
-    "static/js/3.fadaa205.chunk.js": "/static/js/3.fadaa205.chunk.js",
+    "main.js": "/static/js/main.b8a2d268.chunk.js",
+    "runtime-main.js": "/static/js/runtime-main.4bdecbc2.js",
+    "static/js/2.4e4b8adf.chunk.js": "/static/js/2.4e4b8adf.chunk.js",
+    "static/js/3.a8f89738.chunk.js": "/static/js/3.a8f89738.chunk.js",
     "index.html": "/index.html",
-    "static/js/2.c7c9350f.chunk.js.LICENSE.txt": "/static/js/2.c7c9350f.chunk.js.LICENSE.txt",
+    "static/js/2.4e4b8adf.chunk.js.LICENSE.txt": "/static/js/2.4e4b8adf.chunk.js.LICENSE.txt",
     "static/media/architecture.8f5be271.png": "/static/media/architecture.8f5be271.png",
     "static/media/codex.3ae9490a.jpg": "/static/media/codex.3ae9490a.jpg",
     "static/media/codex_sale.91357aaf.png": "/static/media/codex_sale.91357aaf.png",
@@ -26,9 +26,9 @@
     "static/media/punks_testimonial_2.75ab64a7.png": "/static/media/punks_testimonial_2.75ab64a7.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.4ed5b91d.js",
-    "static/js/2.c7c9350f.chunk.js",
+    "static/js/runtime-main.4bdecbc2.js",
+    "static/js/2.4e4b8adf.chunk.js",
     "static/css/main.25fa5b24.chunk.css",
-    "static/js/main.19701662.chunk.js"
+    "static/js/main.b8a2d268.chunk.js"
   ]
 }
